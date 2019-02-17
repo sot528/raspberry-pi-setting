@@ -1,0 +1,7 @@
+[raspbian]
+raspbian-pi
+
+[raspbian:vars]
+ansible_ssh_port=22
+ansible_ssh_user=pi
+ansible_ssh_pass=raspberry

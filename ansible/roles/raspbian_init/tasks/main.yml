@@ -1,0 +1,29 @@
+---
+
+- name: Add directory
+  file:
+    path: '{{ item.path }}'
+    state: directory
+    owner: root
+    group: root
+    mode: '{{ item.mode }}'
+  with_items:
+    - { path: '/root/.ssh', mode: '0700' }
+
+- name: Copy files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: 0644
+  with_items:
+    - { src: 'sshd_config', dest: "/etc/ssh/sshd_config", owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'authorized_keys', dest: "/root/.ssh/authorized_keys", owner: 'root', group: 'root', mode: '0600' }
+
+- name: Restart service ssh
+  systemd:
+    name: ssh
+    state: restarted
+  tags:
+    - tmp
